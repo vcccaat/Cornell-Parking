@@ -1,0 +1,72 @@
+
+# get all parks info
+GET /parks/
+Response:
+[{
+	ID: Int
+	name: String
+	latitude: Float
+	longitude: Float
+	address: String
+	hourlyRate: String
+	dailyRate: String
+	rateDays: String
+	openHours: String
+	note: String
+}, 
+…
+]
+
+# get all comments for a park
+GET /comments/{parkid}/
+Response:
+[{
+	netid: String
+	comment: String
+}, 
+…
+]
+
+# user post a comment for a park
+POST /parks/{id}/
+Params:
+{
+	Netid: String
+	Comment: String
+}
+Response:
+{
+	Success: Bool
+}
+
+# user delete a comment for a park
+DELETE /parks/{id}/
+Params:
+{
+	Netid: String
+}
+Response:
+{
+	Success: Bool
+}
+
+
+db
+
+Park Table
+	ID: Int
+	Name: String
+	Latitude: Float
+	Longitude: Float
+	Address: String
+	HourlyRate: String
+	DailyRate: String
+	RateDays: String
+	OpenHours: String
+	Note: String
+
+Comment Table
+	ID: Int
+	Netid: String
+	Comment: String
+	Parkid: Int (foreign key)
