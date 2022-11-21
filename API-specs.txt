@@ -1,72 +1,153 @@
+Available APIs:
+GET /parks/     # get all parks info
+POST /parks/    # create a park
+GET /parks/{id} # get a park info by id
+DELETE /parks/{id} # delete a park by id
+POST /parks/{park_id}/comment/  # add a comment for a park (optional with img)
+GET /parks/{id}/comment/  # get all comments for a park by id
+DELETE /comments/{id}/  # user delete a comment for a park
 
 # get all parks info
 GET /parks/
-Response:
-[{
-	ID: Int
+Success Response 200:
+{
+	parks: [{
+		id: Int
+		name: String
+		latitude: Float  nullable
+		longitude: Float  nullable
+		address: String
+		hourlyRate: String   nullable
+		dailyRate: String   nullable
+		rateDays: String   nullable
+		openHours: String   nullable
+		note: String   nullable
+		comments: [String]  
+	}, 
+	…
+	]
+}
+
+
+# create a park
+POST /parks/
+Success Response 201:
+{
+	id: Int
 	name: String
-	latitude: Float
-	longitude: Float
+	latitude: Float  nullable
+	longitude: Float  nullable
 	address: String
-	hourlyRate: String
-	dailyRate: String
-	rateDays: String
-	openHours: String
-	note: String
-}, 
-…
-]
+	hourlyRate: String   nullable
+	dailyRate: String   nullable
+	rateDays: String   nullable
+	openHours: String   nullable
+	note: String   nullable
+	comments: []  
+}
+Failure Response 400:
+{
+	"error: "This parking already exist"/"didn't provide name or address"
+}
 
-# get all comments for a park
-GET /comments/{parkid}/
-Response:
-[{
-	netid: String
-	comment: String
-}, 
-…
-]
 
-# user post a comment for a park
-POST /parks/{id}/
+# get a park info by id
+GET /parks/{id}
+Success Response 200:
+{
+	id: Int
+	name: String
+	latitude: Float  nullable
+	longitude: Float  nullable
+	address: String
+	hourlyRate: String   nullable
+	dailyRate: String   nullable
+	rateDays: String   nullable
+	openHours: String   nullable
+	note: String   nullable
+	comments: [String]  
+}
+Failure Response 400:
+{
+	"error: "park not found"
+}
+
+
+
+# delete a park
+DELETE /parks/{id}
+Success Response 200:
+{
+	id: Int
+	name: String
+	latitude: Float  nullable
+	longitude: Float  nullable
+	address: String
+	hourlyRate: String   nullable
+	dailyRate: String   nullable
+	rateDays: String   nullable
+	openHours: String   nullable
+	note: String   nullable
+	comments: [String]  
+}
+Failure Response 400:
+{
+	"error: "park not found"
+}
+
+
+# add a comment for a park
+POST /parks/{park_id}/comment/
 Params:
 {
-	Netid: String
-	Comment: String
+	netid: String 
+	comment: String
+	img_data: base64 string  nullable
 }
-Response:
+Success Response 201:
 {
-	Success: Bool
+    "id": 1,
+    "netid": "yz2698",
+    "comment": "Easy to find",
+    "img": "https://images-yingshi.s3.us-east-1.amazonaws.com/WWCF4XQVQYRHGDZX.png"
 }
+Failure Response 400:
+{
+	"error: "didn't provide info"/"park not found"
+}
+
+
+# get all comments for a park by id
+GET /parks/{id}/comment/
+Success Response 201:
+{
+    "comments": [
+        {
+            "id": 1,
+            "netid": "yz2698",
+            "comment": "Easy to find",
+            "img": "https://images-yingshi.s3.us-east-1.amazonaws.com/WWCF4XQVQYRHGDZX.png"
+        }
+    ]
+}
+Failure Response:
+{
+	"error: "park not found"
+}
+
+
 
 # user delete a comment for a park
-DELETE /parks/{id}/
-Params:
+DELETE /comments/{id}/
+Success Response:
 {
-	Netid: String
+	  "id": 1,
+    "netid": "yz2698",
+    "comment": "bad place",
+    "img": "https://images-yingshi.s3.us-east-1.amazonaws.com/I56L8P9FSB416XNM.png"
 }
-Response:
+Failure Response:
 {
-	Success: Bool
+	"error: "comment not found"
 }
 
-
-db Design
-
-Park Table
-	ID: Int
-	Name: String
-	Latitude: Float
-	Longitude: Float
-	Address: String
-	HourlyRate: String
-	DailyRate: String
-	RateDays: String
-	OpenHours: String
-	Note: String
-
-Comment Table
-	ID: Int
-	Netid: String
-	Comment: String
-	Parkid: Int (foreign key)
